@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}حسابي{% endblock %}
+{% block content %}
+<div class="card store-row">
+  <div class="store-ava">{{ user['name'][:1] }}</div>
+  <div class="store-info"><b>{{ user['name'] }}</b><span class="muted" dir="ltr" style="text-align:right">{{ user['phone'] }}</span></div>
+</div>
+
+<a class="card" href="{{ url_for('my_orders') }}">📦 طلباتي</a>
+{% if my_store %}
+  <a class="card" href="{{ url_for('seller_dashboard') }}">🏪 لوحة متجري ({{ my_store['name'] }})</a>
+  <a class="card" href="{{ url_for('seller_products') }}">🧾 منتجاتي</a>
+  <a class="card" href="{{ url_for('seller_orders') }}">📬 طلبات متجري</a>
+{% else %}
+  <a class="card" href="{{ url_for('seller_store') }}">🏪 افتح متجرك وابدأ البيع</a>
+{% endif %}
+
+<form method="post" action="{{ url_for('logout') }}" style="margin-top:14px">
+  {{ hidden_csrf() }}
+  <button class="btn gray block" type="submit">تسجيل الخروج</button>
+</form>
+{% endblock %}

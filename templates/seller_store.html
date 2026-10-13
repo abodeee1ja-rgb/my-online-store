@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}{{ 'إعدادات المتجر' if my_store else 'افتح متجرك' }}{% endblock %}
+{% block content %}
+{% if my_store %}{% include "seller_nav.html" %}{% endif %}
+<h1>{{ 'بيانات المتجر' if my_store else '🏪 افتح متجرك' }}</h1>
+<form class="card" method="post">
+  {{ hidden_csrf() }}
+  <label>اسم المتجر</label>
+  <input name="name" required maxlength="60" value="{{ form.get('name', '') }}">
+  <label>وصف المتجر</label>
+  <textarea name="description" placeholder="شنو تبيع؟ شنو يميّز متجرك؟">{{ form.get('description', '') }}</textarea>
+  <div class="row">
+    <div><label>رقم التواصل</label>
+      <input name="phone" type="tel" inputmode="tel" dir="ltr" style="text-align:right" value="{{ form.get('phone', '') }}" placeholder="رقم حسابك افتراضياً"></div>
+    <div><label>المدينة</label><input name="city" value="{{ form.get('city', '') }}" placeholder="الناصرية..."></div>
+  </div>
+  <div class="form-actions"><button class="btn block" type="submit">{{ 'حفظ' if my_store else 'فتح المتجر' }}</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}لوحة المتجر{% endblock %}
+{% block content %}
+{% include "seller_nav.html" %}
+<h1>{{ my_store['name'] }}</h1>
+<div class="stats">
+  <div class="stat"><div class="v">{{ stats.new_orders }}</div><div class="l">طلبات جديدة</div></div>
+  <div class="stat"><div class="v">{{ stats.products }}</div><div class="l">عدد المنتجات</div></div>
+  <div class="stat"><div class="v">{{ stats.pending|money }}</div><div class="l">طلبات قيد التنفيذ (د.ع)</div></div>
+  <div class="stat"><div class="v">{{ stats.sales|money }}</div><div class="l">مبيعات مسلّمة (د.ع)</div></div>
+</div>
+
+<div class="form-actions" style="margin:0 0 12px">
+  <a class="btn" href="{{ url_for('seller_product_new') }}">➕ منتج جديد</a>
+  <a class="btn gray" href="{{ url_for('store_page', sid=my_store['id']) }}">👁️ شوف متجرك</a>
+</div>
+
+{% if stats.new_orders %}
+  <a class="flash ok" style="display:block" href="{{ url_for('seller_orders', status='new') }}">📬 عندك {{ stats.new_orders }} طلب جديد بانتظار التأكيد</a>
+{% endif %}
+
+{% if low %}
+<div class="card">
+  <b>⚠️ منتجات قاربت تخلص</b>
+  <table><tbody>
+  {% for p in low %}
+    <tr><td>{{ p['name'] }}</td><td>{{ p['stock'] }} متبقي</td>
+    <td><a class="btn small gray" href="{{ url_for('seller_product_edit', pid=p['id']) }}">تعديل</a></td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+{% endblock %}

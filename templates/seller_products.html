@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}منتجاتي{% endblock %}
+{% block content %}
+{% include "seller_nav.html" %}
+<div class="section-head"><h1 style="margin:0">منتجاتي ({{ products|length }})</h1>
+  <a class="btn small" href="{{ url_for('seller_product_new') }}">➕ إضافة</a></div>
+{% if products %}
+<div class="card">
+  {% for p in products %}
+  <div class="cart-line">
+    <div class="thumb">{% if p['image'] %}<img src="{{ url_for('static', filename='uploads/' ~ p['image']) }}" alt="">{% else %}🛍️{% endif %}</div>
+    <div class="info">
+      <b>{{ p['name'] }}</b>
+      <div class="muted">{{ p['price']|money }} د.ع · المخزون: {{ p['stock'] }}</div>
+      <div style="display:flex;gap:6px;margin-top:4px">
+        <a class="btn small gray" href="{{ url_for('seller_product_edit', pid=p['id']) }}">تعديل</a>
+        <form method="post" action="{{ url_for('seller_product_delete', pid=p['id']) }}" onsubmit="return confirm('تحذف هذا المنتج؟')">
+          {{ hidden_csrf() }}<button class="btn small danger" type="submit">حذف</button>
+        </form>
+      </div>
+    </div>
+    {% if p['stock'] <= 0 %}<span class="badge">نفد</span>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty"><div class="big">📦</div>ما أضفت منتجات بعد.<br><br><a class="btn" href="{{ url_for('seller_product_new') }}">أضف أول منتج</a></div>
+{% endif %}
+{% endblock %}

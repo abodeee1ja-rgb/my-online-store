@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pcard %}
+{% block title %}المنتجات{% endblock %}
+{% block content %}
+<h1>{% if q %}نتائج «{{ q }}»{% elif category %}{{ category }}{% else %}كل المنتجات{% endif %}</h1>
+<div class="chips" style="margin-bottom:12px">
+  <a class="chip {{ 'active' if not category }}" href="{{ url_for('products', q=q) }}">الكل</a>
+  {% for c in categories %}
+    <a class="chip {{ 'active' if c == category }}" href="{{ url_for('products', category=c, q=q) }}">{{ c }}</a>
+  {% endfor %}
+</div>
+{% if products %}
+  <div class="grid">{% for p in products %}{{ pcard(p) }}{% endfor %}</div>
+{% else %}
+  <div class="empty"><div class="big">🔍</div>ما لقينا منتجات مطابقة.</div>
+{% endif %}
+{% endblock %}

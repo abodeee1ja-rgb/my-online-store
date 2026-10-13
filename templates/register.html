@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}إنشاء حساب{% endblock %}
+{% block content %}
+<h1>إنشاء حساب</h1>
+<form class="card" method="post">
+  {{ hidden_csrf() }}
+  <label>الاسم</label>
+  <input name="name" required autocomplete="name">
+  <label>رقم الهاتف</label>
+  <input name="phone" type="tel" inputmode="tel" required dir="ltr" style="text-align:right" autocomplete="username">
+  <label>كلمة السر (6 على الأقل)</label>
+  <input name="password" type="password" required minlength="6" autocomplete="new-password">
+  <label style="display:flex;gap:8px;align-items:center;font-weight:600">
+    <input type="checkbox" name="want_store" value="1" style="width:auto" {{ 'checked' if want_store }}>
+    أريد أفتح متجر وأبيع منتجاتي
+  </label>
+  <div class="form-actions"><button class="btn block" type="submit">إنشاء الحساب</button></div>
+</form>
+<p class="muted" style="text-align:center">عندك حساب؟ <a href="{{ url_for('login') }}" style="color:var(--primary);font-weight:700">سجّل دخولك</a></p>
+{% endblock %}

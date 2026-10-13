@@ -1,0 +1,7 @@
+{% set ep = request.endpoint or '' %}
+<div class="tabs">
+  <a class="chip {{ 'active' if ep == 'seller_dashboard' }}" href="{{ url_for('seller_dashboard') }}">📊 الملخص</a>
+  <a class="chip {{ 'active' if ep.startswith('seller_product') }}" href="{{ url_for('seller_products') }}">🧾 المنتجات</a>
+  <a class="chip {{ 'active' if ep.startswith('seller_order') }}" href="{{ url_for('seller_orders') }}">📬 الطلبات</a>
+  <a class="chip {{ 'active' if ep == 'seller_store' }}" href="{{ url_for('seller_store') }}">⚙️ المتجر</a>
+</div>

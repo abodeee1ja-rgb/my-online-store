@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+secret.key
+market.db
+market_backup.db
+app_backup.py
+instance/

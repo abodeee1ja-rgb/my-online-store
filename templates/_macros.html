@@ -1,0 +1,26 @@
+{% macro pcard(p) %}
+<a class="pcard" href="{{ url_for('product', pid=p['id']) }}">
+  <div class="pimg">
+    {% if p['image'] %}<img src="{{ url_for('static', filename='uploads/' ~ p['image']) }}" alt="{{ p['name'] }}" loading="lazy">{% else %}🛍️{% endif %}
+  </div>
+  <div class="pbody">
+    <div class="pname">{{ p['name'] }}</div>
+    {% if p['store_name'] %}<div class="pstore">🏪 {{ p['store_name'] }}</div>{% endif %}
+    <div class="pprice">{{ p['price']|money }} <small>د.ع</small>
+      {% if p['stock'] <= 0 %}<span class="badge">نفد</span>{% endif %}
+    </div>
+  </div>
+</a>
+{% endmacro %}
+
+{% macro store_card(s) %}
+<a class="card store-row" href="{{ url_for('store_page', sid=s['id']) }}">
+  <div class="store-ava">{{ s['name'][:1] }}</div>
+  <div class="store-info">
+    <b>{{ s['name'] }}</b>
+    <span class="muted">{% if s['city'] %}📍 {{ s['city'] }} · {% endif %}{{ s['n'] }} منتج</span>
+  </div>
+</a>
+{% endmacro %}
+
+{% macro hidden_csrf() %}<input type="hidden" name="csrf" value="{{ csrf() }}">{% endmacro %}

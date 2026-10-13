@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}تم الطلب{% endblock %}
+{% block content %}
+<div class="empty"><div class="big">✅</div><h1>وصل طلبك!</h1>
+<p>كل متجر راح يتواصل وياك على رقم هاتفك لتأكيد الطلب والتوصيل.</p></div>
+{% for o in orders %}
+<div class="card">
+  <div class="order-head"><b>طلب #{{ o['id'] }} · {{ o['store_name'] }}</b><span class="badge blue">{{ status_labels[o['status']] }}</span></div>
+  <div>المبلغ: <b>{{ o['total']|money }} د.ع</b> (عند الاستلام)</div>
+  {% if o['store_phone'] %}<div class="muted">📞 رقم المتجر: <a href="tel:{{ o['store_phone'] }}" dir="ltr">{{ o['store_phone'] }}</a></div>{% endif %}
+</div>
+{% endfor %}
+<a class="btn block" href="{{ url_for('index') }}">متابعة التسوق</a>
+{% endblock %}

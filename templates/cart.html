@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}السلة{% endblock %}
+{% block content %}
+<h1>🛒 سلتك</h1>
+{% if lines %}
+<div class="card">
+  {% for l in lines %}
+  <div class="cart-line">
+    <a class="thumb" href="{{ url_for('product', pid=l.p['id']) }}">
+      {% if l.p['image'] %}<img src="{{ url_for('static', filename='uploads/' ~ l.p['image']) }}" alt="">{% else %}🛍️{% endif %}
+    </a>
+    <div class="info">
+      <b>{{ l.p['name'] }}</b>
+      <div class="muted">🏪 {{ l.p['store_name'] }} · {{ l.p['price']|money }} د.ع</div>
+      <form method="post" action="{{ url_for('cart_update', pid=l.p['id']) }}">
+        {{ hidden_csrf() }}
+        <input type="number" name="qty" value="{{ l.qty }}" min="0" max="{{ l.p['stock'] }}">
+        <button class="btn small gray" type="submit">تحديث</button>
+        <button class="btn small danger" type="submit" name="remove" value="1">حذف</button>
+      </form>
+    </div>
+    <b>{{ l.sub|money }}</b>
+  </div>
+  {% endfor %}
+  <div class="total-row"><span>المجموع</span><span>{{ total|money }} د.ع</span></div>
+  <p class="muted" style="margin-top:6px">الدفع عند الاستلام. التوصيل يتفق عليه الزبون مع كل متجر.</p>
+</div>
+<a class="btn block" href="{{ url_for('checkout') }}">إتمام الطلب</a>
+{% else %}
+<div class="empty"><div class="big">🛒</div>سلتك فارغة.<br><br><a class="btn" href="{{ url_for('products') }}">تصفح المنتجات</a></div>
+{% endif %}
+{% endblock %}

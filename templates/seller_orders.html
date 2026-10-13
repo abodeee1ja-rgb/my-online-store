@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}طلبات المتجر{% endblock %}
+{% block content %}
+{% include "seller_nav.html" %}
+<h1>طلبات المتجر</h1>
+<div class="tabs">
+  <a class="chip {{ 'active' if not status }}" href="{{ url_for('seller_orders') }}">الكل</a>
+  {% for key, label in status_labels.items() %}
+    <a class="chip {{ 'active' if status == key }}" href="{{ url_for('seller_orders', status=key) }}">{{ label }}</a>
+  {% endfor %}
+</div>
+
+{% for o in orders %}
+<div class="order">
+  <div class="order-head">
+    <b>طلب #{{ o['id'] }}</b>
+    <span class="badge {{ 'ok' if o['status'] == 'delivered' else ('' if o['status'] == 'cancelled' else 'blue') }}">{{ status_labels[o['status']] }}</span>
+  </div>
+  <div class="muted">{{ o['created_at'] }}</div>
+  <div>👤 {{ o['customer_name'] }} · 📞 <a href="tel:{{ o['customer_phone'] }}" dir="ltr">{{ o['customer_phone'] }}</a></div>
+  <div>📍 {{ o['address'] }}</div>
+  {% if o['note'] %}<div class="muted">📝 {{ o['note'] }}</div>{% endif %}
+  <ul>{% for it in items[o['id']] %}<li><span>{{ it['name'] }} × {{ it['qty'] }}</span><span>{{ (it['price'] * it['qty'])|money }}</span></li>{% endfor %}</ul>
+  <div class="total-row" style="font-size:1rem"><span>المجموع (عند الاستلام)</span><span>{{ o['total']|money }} د.ع</span></div>
+  {% if o['status'] in ('new', 'confirmed') %}
+  <div class="actions">
+    <form method="post" action="{{ url_for('seller_order_status', oid=o['id']) }}">
+      {{ hidden_csrf() }}
+      {% if o['status'] == 'new' %}
+        <button class="btn small" name="status" value="confirmed">✔ تأكيد</button>
+      {% else %}
+        <button class="btn small accent" name="status" value="delivered">📦 تم التسليم</button>
+      {% endif %}
+    </form>
+    <form method="post" action="{{ url_for('seller_order_status', oid=o['id']) }}" onsubmit="return confirm('تلغي الطلب؟ ترجع الكميات للمخزون.')">
+      {{ hidden_csrf() }}<button class="btn small danger" name="status" value="cancelled">✖ إلغاء</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% else %}
+<div class="empty"><div class="big">📬</div>ما أكو طلبات هنا.</div>
+{% endfor %}
+{% endblock %}

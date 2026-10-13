@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pcard %}
+{% block title %}{{ store['name'] }}{% endblock %}
+{% block content %}
+<div class="card store-row">
+  <div class="store-ava">{{ store['name'][:1] }}</div>
+  <div class="store-info">
+    <b style="font-size:1.1rem">{{ store['name'] }}</b>
+    <span class="muted">{% if store['city'] %}📍 {{ store['city'] }}{% endif %}</span>
+    {% if store['phone'] %}<span class="muted" style="display:block">📞 <a href="tel:{{ store['phone'] }}" dir="ltr">{{ store['phone'] }}</a></span>{% endif %}
+  </div>
+</div>
+{% if store['description'] %}<div class="card" style="white-space:pre-line">{{ store['description'] }}</div>{% endif %}
+
+<h2>منتجات المتجر</h2>
+{% if products %}
+  <div class="grid">{% for p in products %}{{ pcard(p) }}{% endfor %}</div>
+{% else %}
+  <div class="empty"><div class="big">📦</div>هذا المتجر لم يضف منتجات بعد.</div>
+{% endif %}
+{% endblock %}

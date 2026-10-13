@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "_macros.html" import store_card %}
+{% block title %}المتاجر{% endblock %}
+{% block content %}
+<h1>المتاجر</h1>
+{% for s in stores %}{{ store_card(s) }}
+{% else %}
+  <div class="empty"><div class="big">🏪</div>ما أكو متاجر بعد.</div>
+{% endfor %}
+{% endblock %}

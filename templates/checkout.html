@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}إتمام الطلب{% endblock %}
+{% block content %}
+<h1>إتمام الطلب</h1>
+<div class="card">
+  {% for l in lines %}
+    <div class="cart-line" style="padding:6px 0">
+      <div class="info"><b>{{ l.p['name'] }}</b> <span class="muted">× {{ l.qty }} · {{ l.p['store_name'] }}</span></div>
+      <b>{{ l.sub|money }}</b>
+    </div>
+  {% endfor %}
+  <div class="total-row"><span>المجموع</span><span>{{ total|money }} د.ع</span></div>
+</div>
+
+<form class="card" method="post">
+  {{ hidden_csrf() }}
+  <label>الاسم</label>
+  <input name="name" required value="{{ form.get('name', '') }}">
+  <label>رقم الهاتف</label>
+  <input name="phone" type="tel" inputmode="tel" required dir="ltr" style="text-align:right" value="{{ form.get('phone', '') }}">
+  <label>العنوان (المحافظة، المنطقة، أقرب نقطة دالة)</label>
+  <textarea name="address" required>{{ form.get('address', '') }}</textarea>
+  <label>ملاحظات (اختياري)</label>
+  <textarea name="note" style="min-height:60px">{{ form.get('note', '') }}</textarea>
+  <p class="muted" style="margin-top:8px">💵 الدفع عند الاستلام. إذا طلبت من أكثر من متجر ينفتح طلب منفصل لكل متجر.</p>
+  <div class="form-actions"><button class="btn block" type="submit">تأكيد الطلب</button></div>
+</form>
+{% endblock %}

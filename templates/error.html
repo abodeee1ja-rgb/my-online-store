@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}خطأ{% endblock %}
+{% block content %}
+<div class="empty"><div class="big">⚠️</div><h1>{{ code }}</h1><p>{{ message }}</p><br>
+<a class="btn" href="{{ url_for('index') }}">الرئيسية</a></div>
+{% endblock %}

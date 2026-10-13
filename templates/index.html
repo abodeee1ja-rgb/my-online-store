@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pcard, store_card %}
+{% block title %}الرئيسية{% endblock %}
+{% block content %}
+<div class="hero">
+  <h1>سوق أهل منطقتك في جيبك</h1>
+  <p>تسوّق من متاجر محلية، أو افتح متجرك وابدأ البيع مجاناً.</p>
+  {% if my_store %}
+    <a class="btn light" href="{{ url_for('seller_dashboard') }}">لوحة متجري</a>
+  {% else %}
+    <a class="btn light" href="{{ url_for('seller_store') if user else url_for('register', store=1) }}">🏪 افتح متجرك</a>
+  {% endif %}
+</div>
+
+<div class="chips">
+  {% for c in categories %}
+    <a class="chip" href="{{ url_for('products', category=c) }}">{{ c }}</a>
+  {% endfor %}
+</div>
+
+<div class="section-head"><h2>أحدث المنتجات</h2><a href="{{ url_for('products') }}">عرض الكل ←</a></div>
+{% if products %}
+  <div class="grid">{% for p in products %}{{ pcard(p) }}{% endfor %}</div>
+{% else %}
+  <div class="empty"><div class="big">🛍️</div>ما أكو منتجات بعد. كون أول بائع وأضف منتجك!</div>
+{% endif %}
+
+{% if stores %}
+  <div class="section-head"><h2>المتاجر</h2><a href="{{ url_for('stores') }}">عرض الكل ←</a></div>
+  {% for s in stores %}{{ store_card(s) }}{% endfor %}
+{% endif %}
+{% endblock %}

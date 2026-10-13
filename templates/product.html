@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}{{ p['name'] }}{% endblock %}
+{% block content %}
+<div class="product-page">
+  <div class="pimg">
+    {% if p['image'] %}<img src="{{ url_for('static', filename='uploads/' ~ p['image']) }}" alt="{{ p['name'] }}">{% else %}🛍️{% endif %}
+  </div>
+  <div>
+    <h1>{{ p['name'] }}</h1>
+    <div class="price-big">{{ p['price']|money }} <small class="muted">د.ع</small></div>
+    <p style="margin:6px 0">
+      <span class="badge gray">{{ p['category'] }}</span>
+      {% if p['stock'] > 0 %}<span class="badge ok">متوفر ({{ p['stock'] }})</span>{% else %}<span class="badge">نفد من المخزون</span>{% endif %}
+    </p>
+    {% if p['description'] %}<p style="white-space:pre-line;margin:10px 0">{{ p['description'] }}</p>{% endif %}
+
+    <a class="card store-row" href="{{ url_for('store_page', sid=store['id']) }}">
+      <div class="store-ava">{{ store['name'][:1] }}</div>
+      <div class="store-info"><b>{{ store['name'] }}</b>
+        <span class="muted">{% if store['city'] %}📍 {{ store['city'] }}{% endif %}</span></div>
+    </a>
+
+    {% if p['stock'] > 0 %}
+    <form method="post" action="{{ url_for('cart_add', pid=p['id']) }}">
+      {{ hidden_csrf() }}
+      <label>الكمية</label>
+      <input class="qty-input" type="number" name="qty" value="1" min="1" max="{{ p['stock'] }}">
+      <div class="form-actions">
+        <button class="btn block" type="submit">أضف للسلة</button>
+        <button class="btn accent block" type="submit" name="buy_now" value="1">اشتري الآن</button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

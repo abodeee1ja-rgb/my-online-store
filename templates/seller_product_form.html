@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}{{ 'تعديل منتج' if editing else 'منتج جديد' }}{% endblock %}
+{% block content %}
+{% include "seller_nav.html" %}
+<h1>{{ 'تعديل المنتج' if editing else 'منتج جديد' }}</h1>
+<form class="card" method="post" enctype="multipart/form-data">
+  {{ hidden_csrf() }}
+  <label>اسم المنتج</label>
+  <input name="name" required maxlength="100" value="{{ p.get('name', '') }}">
+  <label>الوصف</label>
+  <textarea name="description">{{ p.get('description', '') }}</textarea>
+  <div class="row">
+    <div><label>السعر (دينار)</label><input name="price" type="number" step="any" min="0" required inputmode="decimal" value="{{ p.get('price', '') }}"></div>
+    <div><label>الكمية المتوفرة</label><input name="stock" type="number" min="0" required inputmode="numeric" value="{{ p.get('stock', 1) }}"></div>
+  </div>
+  <label>الفئة</label>
+  <select name="category">
+    {% for c in categories %}<option value="{{ c }}" {{ 'selected' if p.get('category') == c }}>{{ c }}</option>{% endfor %}
+  </select>
+  <label>صورة المنتج</label>
+  {% if editing and p['image'] %}<img src="{{ url_for('static', filename='uploads/' ~ p['image']) }}" alt="" style="width:110px;border-radius:10px;margin-bottom:6px">{% endif %}
+  <input type="file" name="image" accept="image/png,image/jpeg,image/webp">
+  <p class="muted">الحد الأقصى 4 ميغا.</p>
+  <div class="form-actions">
+    <button class="btn block" type="submit">حفظ</button>
+    <a class="btn gray block" href="{{ url_for('seller_products') }}">إلغاء</a>
+  </div>
+</form>
+{% endblock %}

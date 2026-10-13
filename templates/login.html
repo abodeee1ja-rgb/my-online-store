@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_macros.html" import hidden_csrf %}
+{% block title %}تسجيل الدخول{% endblock %}
+{% block content %}
+<h1>تسجيل الدخول</h1>
+<form class="card" method="post">
+  {{ hidden_csrf() }}
+  <label>رقم الهاتف</label>
+  <input name="phone" type="tel" inputmode="tel" required dir="ltr" style="text-align:right" autocomplete="username">
+  <label>كلمة السر</label>
+  <input name="password" type="password" required autocomplete="current-password">
+  <div class="form-actions"><button class="btn block" type="submit">دخول</button></div>
+</form>
+<p class="muted" style="text-align:center">ما عندك حساب؟ <a href="{{ url_for('register', next=request.args.get('next')) }}" style="color:var(--primary);font-weight:700">أنشئ حساب</a></p>
+{% endblock %}
